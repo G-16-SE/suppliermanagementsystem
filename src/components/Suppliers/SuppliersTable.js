@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalFilter, useRowSelect, useTable } from "react-table";
-import { Button, Table, Modal, ModalHeader, ModalBody, Alert } from "reactstrap";
+import {
+  Button,
+  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Alert,
+} from "reactstrap";
 import axios from "axios";
 import { Checkbox } from "../Utils/checkbox";
 import EditSupplier from "./EditSupplier";
@@ -36,7 +43,6 @@ const COLUMNS = [
 ];
 
 export default function SupplersTable() {
-
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -53,22 +59,21 @@ export default function SupplersTable() {
   };
 
   const dateFormatter = (date) => {
-    return date.split("T")[0]
-} 
-
+    return date.split("T")[0];
+  };
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get("https://s-16-sms.herokuapp.com/supplier/all", {withCredentials:true})
+      .get("http://localhost:8087/supplier/all", { withCredentials: true })
       .then((getSuppliers) => {
-        let data = []
-        getSuppliers.data.data.forEach(m => {
-          m.joined_date = dateFormatter(m.joined_date)
-          data.push(m)
+        let data = [];
+        getSuppliers.data.data.forEach((m) => {
+          m.joined_date = dateFormatter(m.joined_date);
+          data.push(m);
         });
         setSuppliers(data);
-        setShowToFalse()
+        setShowToFalse();
       })
       .catch((err) => {
         setAlertMessage("");
@@ -99,7 +104,6 @@ export default function SupplersTable() {
         }
       });
   }, []);
-
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalId, setModalId] = useState(1);
@@ -133,7 +137,8 @@ export default function SupplersTable() {
       columns: COLUMNS,
       data: suppliers,
     },
-    useRowSelect, useGlobalFilter,
+    useRowSelect,
+    useGlobalFilter,
     (hooks) => {
       hooks.visibleColumns.push((columns) => {
         return [
@@ -164,46 +169,55 @@ export default function SupplersTable() {
   const { globalFilter } = state;
 
   const deleteRecords = () => {
-    const url = 'https://s-16-sms.herokuapp.com/supplier/remove'
-    axios.post(url, selectedrows).then((res) => {
-      setShowToFalse()
-    }).catch(err => {
-      setAlertMessage("");
-      switch (err.response.request.status) {
-        case 400:
-          setAlertMessage(err.response.data.message);
-          setShowToTrue();
-          break;
-        case 401:
-          auth.logout();
-          auth.setAlert("Session Expired! Login Again");
-          navigate("/");
-          break;
-        case 500:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        case 501:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        case 502:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        default:
-          break;
-      }
-    })
+    const url = "http://localhost:8087/supplier/remove";
+    axios
+      .post(url, selectedrows)
+      .then((res) => {
+        setShowToFalse();
+      })
+      .catch((err) => {
+        setAlertMessage("");
+        switch (err.response.request.status) {
+          case 400:
+            setAlertMessage(err.response.data.message);
+            setShowToTrue();
+            break;
+          case 401:
+            auth.logout();
+            auth.setAlert("Session Expired! Login Again");
+            navigate("/");
+            break;
+          case 500:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          case 501:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          case 502:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          default:
+            break;
+        }
+      });
   };
 
   return (
     <React.Fragment>
-      <Button color="secondary" outline className="shadow-sm"
-      onClick={deleteRecords}>Delete Supplier</Button>
+      <Button
+        color="secondary"
+        outline
+        className="shadow-sm"
+        onClick={deleteRecords}
+      >
+        Delete Supplier
+      </Button>
       {/* {data = SupplyRecordsTable.selectedrows} */}
       <br></br>
-      <Alert isOpen={show} color='danger' toggle={setShowToFalse}>
+      <Alert isOpen={show} color="danger" toggle={setShowToFalse}>
         <p>{alertMessage}</p>
       </Alert>
       <br></br>

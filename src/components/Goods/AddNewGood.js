@@ -59,26 +59,24 @@ export default function AddGood() {
     return errors;
   };
 
-  const onImageChange = (event) => {
-    // if (event.target.files && event.target.files[0]) {
-    //   setImage(URL.createObjectURL(event.target.files[0]));
-    // }
-    setImage(event.target.files[0]);
-  };
+  // const onImageChange = (event) => {
+  //   // if (event.target.files && event.target.files[0]) {
+  //   //   setImage(URL.createObjectURL(event.target.files[0]));
+  //   // }
+  //   setImage(event.target.files[0]);
+  // };
 
   const sendData = () => {
-    const url = "https://s-16-sms.herokuapp.com/storage/addgood";
+    const url = "http://localhost:8087/storage/addgood";
     var formData = new FormData();
     formData.append("type", data.type);
     formData.append("unit", data.unit);
     formData.append("unit_price", data.unit_price);
     formData.append("image", image);
 
-    const finalData = data;
-    finalData["image"] = image;
     axios.defaults.withCredentials = true;
     axios
-      .post(url, formData, {withCredentials:true})
+      .post(url, data, { withCredentials: true })
       .then((res) => {
         setAlertColor("info");
         setAlertMessage("Successfully added.");
@@ -163,10 +161,10 @@ export default function AddGood() {
             />
           </FormGroup>
 
-          <FormGroup>
+          {/* <FormGroup>
             <Label for="image">Upload Image</Label>
             <Input type="file" onChange={onImageChange} />
-          </FormGroup>
+          </FormGroup> */}
 
           <Button color="primary" type="submit">
             {" "}

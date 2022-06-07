@@ -30,14 +30,15 @@ export default function EditSupplier(props) {
 
   const sendData = () => {
     const ID = data.id;
-    const url = `https://s-16-sms.herokuapp.com/supplier/edit/${ID}`;
+    const url = `http://localhost:8087/supplier/edit/${ID}`;
     axios.defaults.withCredentials = true;
     axios
-      .post(url, data, {withCredentials:true})
+      .post(url, data, { withCredentials: true })
       .then((res) => {
         setAlertColor("info");
         setAlertMessage(res.data.message);
         setShowToTrue();
+        navigate(0);
       })
       .catch((err) => {
         setAlertColor("danger");

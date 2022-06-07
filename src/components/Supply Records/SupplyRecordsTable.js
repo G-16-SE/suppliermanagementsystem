@@ -64,7 +64,7 @@ export default function SupplyRecordsTable() {
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get("https://s-16-sms.herokuapp.com/supplyRecord/all", { withCredentials: true })
+      .get("http://localhost:8087/supplyRecord/all", { withCredentials: true })
       .then((getRecords) => {
         let data = [];
         getRecords.data.data.forEach((m) => {

@@ -7,7 +7,7 @@ import {
   CardImg,
   Col,
   Row,
-  CardGroup
+  CardGroup,
 } from "reactstrap";
 import { Button, Modal, ModalHeader, ModalBody, Alert } from "reactstrap";
 import "../../styles/styles_2.css";
@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/auth";
 
 export default function Good() {
-
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -45,13 +44,11 @@ export default function Good() {
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get("https://s-16-sms.herokuapp.com/good/allgoods", {withCredentials:true})
+      .get("http://localhost:8087/good/allgoods", { withCredentials: true })
 
       .then((getGoods) => {
-
         setGoods(getGoods.data.data);
-        setShowToFalse()
-
+        setShowToFalse();
       })
       .catch((err) => {
         setAlertMessage("");
@@ -80,7 +77,6 @@ export default function Good() {
           default:
             break;
         }
-
       });
   }, [goods]);
 
@@ -89,10 +85,15 @@ export default function Good() {
       <div className="Container-fluid shadow ">
         <h2>Goods</h2>
         <br></br>
-        <Alert isOpen={show} color='danger' toggle={setShowToFalse}>
-        <p>{alertMessage}</p>
-      </Alert>
-        <Button outline color="dark" className="shadow-sm" onClick={setModalIsOpenToTrue}>
+        <Alert isOpen={show} color="danger" toggle={setShowToFalse}>
+          <p>{alertMessage}</p>
+        </Alert>
+        <Button
+          outline
+          color="dark"
+          className="shadow-sm"
+          onClick={setModalIsOpenToTrue}
+        >
           {" "}
           Add New Good Type{" "}
         </Button>
@@ -101,44 +102,46 @@ export default function Good() {
 
         <Row>
           <CardGroup>
-          {goods.map((good, index) => (
-            <Col sm="4">
-              <Card
-                key={good.id}
-                className="shadow"
-                style={{
-                  margin: "0.5rem",
-                  border: "0px",
-                  backgroundColor: "rgba(98, 126, 141, 0.34)",
-                  height: '50vh'
-                }}
-              >
-                <CardBody style={{ borderRadius: "5px" }}>
-                  <CardImg style={{ maxHeight: "30vh" , maxWidth: "auto"}}
-                    // className="img-fluid"
-                    src={`http://localhost:3000/img/${good.image}`}
-                    alt="..."
-                    position="top"
-                    width='auto'
-                  ></CardImg>
-                  <br></br><br></br>
-                  <CardTitle>{good.type}</CardTitle>
-                  <CardText>
-                    ID : <b>{good.id}</b>
+            {goods.map((good, index) => (
+              <Col sm="4">
+                <Card
+                  key={good.id}
+                  className="shadow"
+                  style={{
+                    margin: "0.5rem",
+                    border: "0px",
+                    backgroundColor: "rgba(98, 126, 141, 0.34)",
+                    height: "50vh",
+                  }}
+                >
+                  <CardBody style={{ borderRadius: "5px" }}>
+                    <CardImg
+                      style={{ maxHeight: "30vh", maxWidth: "auto" }}
+                      // className="img-fluid"
+                      src={`http://localhost:8087/img/${good.image}`}
+                      alt="..."
+                      position="top"
+                      width="auto"
+                    ></CardImg>
                     <br></br>
-                    Unit : {good.unit}
-                  </CardText>
-                  {/* <Button
+                    <br></br>
+                    <CardTitle>{good.type}</CardTitle>
+                    <CardText>
+                      ID : <b>{good.id}</b>
+                      <br></br>
+                      Unit : {good.unit}
+                    </CardText>
+                    {/* <Button
                     outline
                     color="dark"
                     onClick={() => getDeleteID(good.id)}
                   >
                     Delete
                   </Button> */}
-                </CardBody>
-              </Card>
-            </Col>
-          ))}
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
           </CardGroup>
         </Row>
       </div>

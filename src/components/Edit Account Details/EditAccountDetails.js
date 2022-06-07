@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, ModalHeader, ModalBody, Table, Alert } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Table,
+  Alert,
+} from "reactstrap";
 import EditDetails from "./EditDetails";
 import axios from "axios";
 import "../../styles/styles_1.css";
@@ -7,12 +14,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/auth";
 
 export default function EditAccountDetails() {
-
   const auth = useAuth();
   const navigate = useNavigate();
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [userDetails, setUserDetails] = useState( []);
+  const [userDetails, setUserDetails] = useState([]);
   const [show, setShow] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
@@ -33,12 +39,12 @@ export default function EditAccountDetails() {
   };
 
   useEffect(() => {
-    axios.defaults.withCredentials = true
+    axios.defaults.withCredentials = true;
     axios
-      .get("https://s-16-sms.herokuapp.com/manager/profile", {withCredentials:true}) //Edit Page
+      .get("http://localhost:8087/manager/profile", { withCredentials: true }) //Edit Page
       .then((getUserDetails) => {
         setUserDetails(getUserDetails.data.data[0]);
-        setShowToFalse()
+        setShowToFalse();
       })
       .catch((err) => {
         setAlertMessage("");
@@ -75,12 +81,17 @@ export default function EditAccountDetails() {
       <div className="Container-fluid shadow ">
         <h2>Account Details</h2>
         <br></br>
-        <Alert isOpen={show} color='danger' toggle={setShowToFalse}>
-        <p>{alertMessage}</p>
-      </Alert>
+        <Alert isOpen={show} color="danger" toggle={setShowToFalse}>
+          <p>{alertMessage}</p>
+        </Alert>
         <div className="row">
           <div className="col-sm-12 col-md-auto mb-2 align-content-center">
-            <Button outline color="dark" className="shadow-sm" onClick={setModalIsOpenToTrue}>
+            <Button
+              outline
+              color="dark"
+              className="shadow-sm"
+              onClick={setModalIsOpenToTrue}
+            >
               Account Details
             </Button>
           </div>
@@ -117,7 +128,11 @@ export default function EditAccountDetails() {
                 <b>Joined Date</b>
               </td>
 
-              <td>{(userDetails.join_date)? userDetails.join_date.split('T')[0]:""}</td>
+              <td>
+                {userDetails.join_date
+                  ? userDetails.join_date.split("T")[0]
+                  : ""}
+              </td>
             </tr>
           </tbody>
         </Table>

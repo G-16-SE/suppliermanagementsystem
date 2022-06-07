@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useGlobalFilter, useRowSelect, useTable } from "react-table";
-import { Button, Table, Modal, ModalHeader, ModalBody, Alert } from "reactstrap";
+import {
+  Button,
+  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Alert,
+} from "reactstrap";
 import axios from "axios";
 import { Checkbox } from "../Utils/checkbox";
 import EditSupplyManager from "./EditSupplyManager";
@@ -32,7 +39,6 @@ const COLUMNS = [
 ];
 
 export default function SupplyManagersTable() {
-
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -49,22 +55,21 @@ export default function SupplyManagersTable() {
   };
 
   const dateFormatter = (date) => {
-      return date.split("T")[0]
-  }
+    return date.split("T")[0];
+  };
 
   useEffect(() => {
     axios.defaults.withCredentials = true;
     axios
-      .get("https://s-16-sms.herokuapp.com/user/managers", {withCredentials:true})
+      .get("http://localhost:8087/user/managers", { withCredentials: true })
       .then((getManagers) => {
-        
-        let data = []
-        getManagers.data.data.forEach(m => {
-          m.join_date = dateFormatter(m.join_date)
-          data.push(m)
+        let data = [];
+        getManagers.data.data.forEach((m) => {
+          m.join_date = dateFormatter(m.join_date);
+          data.push(m);
         });
         setSupplyManagers(data);
-        setShowToFalse()
+        setShowToFalse();
       })
       .catch((err) => {
         console.log(err);
@@ -97,39 +102,41 @@ export default function SupplyManagersTable() {
       });
   }, []);
 
-  
   const deleteRecords = () => {
-    const url = 'https://s-16-sms.herokuapp.com/user/manager-delete'
-    axios.post(url, selectedrows).then((res) => {
-      setShowToFalse()
-    }).catch(err => {
-      setAlertMessage("");
-      switch (err.response.request.status) {
-        case 400:
-          setAlertMessage(err.response.data.message);
-          setShowToTrue();
-          break;
-        case 401:
-          auth.logout();
-          auth.setAlert("Session Expired! Login Again");
-          navigate("/");
-          break;
-        case 500:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        case 501:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        case 502:
-          setAlertMessage("Server Error!");
-          setShowToTrue();
-          break;
-        default:
-          break;
-      }
-    })
+    const url = "http://localhost:8087/user/manager-delete";
+    axios
+      .post(url, selectedrows)
+      .then((res) => {
+        setShowToFalse();
+      })
+      .catch((err) => {
+        setAlertMessage("");
+        switch (err.response.request.status) {
+          case 400:
+            setAlertMessage(err.response.data.message);
+            setShowToTrue();
+            break;
+          case 401:
+            auth.logout();
+            auth.setAlert("Session Expired! Login Again");
+            navigate("/");
+            break;
+          case 500:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          case 501:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          case 502:
+            setAlertMessage("Server Error!");
+            setShowToTrue();
+            break;
+          default:
+            break;
+        }
+      });
   };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -199,16 +206,19 @@ export default function SupplyManagersTable() {
   const selectedrows = selectedFlatRows.map((row) => row.original);
   const { globalFilter } = state;
 
-
-
   return (
     <React.Fragment>
-      <Button outline color="secondary" className="shadow-sm"
-      onClick={deleteRecords}
-      >Delete Supply Manager</Button>
-      
+      <Button
+        outline
+        color="secondary"
+        className="shadow-sm"
+        onClick={deleteRecords}
+      >
+        Delete Supply Manager
+      </Button>
+
       <br></br>
-      <Alert isOpen={show} color='danger' toggle={setShowToFalse}>
+      <Alert isOpen={show} color="danger" toggle={setShowToFalse}>
         <p>{alertMessage}</p>
       </Alert>
       <br></br>
